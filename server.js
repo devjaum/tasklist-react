@@ -4,7 +4,7 @@ import { Transform } from 'node:stream'
 
 // Constants
 const isProduction = process.env.NODE_ENV === 'production'
-const port = process.env.PORT || 5173
+const port = process.env.PORT || 3000
 const base = process.env.BASE || '/'
 const ABORT_DELAY = 10000
 
@@ -35,7 +35,7 @@ if (!isProduction) {
 }
 
 // Serve HTML
-app.use('*all', async (req, res) => {
+app.get('*', async (req, res) => {
   try {
     const url = req.originalUrl.replace(base, '')
 
@@ -70,11 +70,11 @@ app.use('*all', async (req, res) => {
 
         const transformStream = new Transform({
           transform(chunk, encoding, callback) {
-            // See entry-server.tsx for more details of this code
             if (!htmlEnded) {
               chunk = chunk.toString()
               if (chunk.endsWith('<vite-streaming-end></vite-streaming-end>')) {
                 res.write(chunk.slice(0, -41) + htmlEnd, 'utf-8')
+                htmlEnded = true
               } else {
                 res.write(chunk, 'utf-8')
               }
@@ -110,6 +110,6 @@ app.use('*all', async (req, res) => {
 })
 
 // Start http server
-app.listen(port, () => {
-  console.log(`Server started at http://localhost:${port}`)
+app.listen(port, '0.0.0.0', () => {
+  console.log(`✅ Server started at http://0.0.0.0:${port}`)
 })
