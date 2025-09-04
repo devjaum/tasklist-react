@@ -10,7 +10,9 @@
 
 body{
     background-color: #ddedfaff;    
-    background-image: url('/doodlePattern.png');
+    background-image: 
+        linear-gradient(rgba(10, 10, 10, 0.2), rgba(10, 10, 10, 0.4)),
+        url('/doodlePattern.png');
     background-size: 70%;
     background-position: center;
     background-repeat: repeat;
